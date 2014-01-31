@@ -8,6 +8,4 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GBStickyViews : NSObject
-
-@end
+#import "UIView+GBStickyViews.h"

@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		8AFAFBEB189BE3940090D199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFAFBEA189BE3940090D199 /* Foundation.framework */; };
 		8AFAFBF0189BE3940090D199 /* GBStickyViews.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8AFAFBEF189BE3940090D199 /* GBStickyViews.h */; };
-		8AFAFBF2189BE3940090D199 /* GBStickyViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AFAFBF1189BE3940090D199 /* GBStickyViews.m */; };
 		8AFAFBF9189BE3940090D199 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFAFBF8189BE3940090D199 /* XCTest.framework */; };
 		8AFAFBFA189BE3940090D199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFAFBEA189BE3940090D199 /* Foundation.framework */; };
 		8AFAFBFC189BE3940090D199 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFAFBFB189BE3940090D199 /* UIKit.framework */; };
 		8AFAFBFF189BE3940090D199 /* libGBStickyViews.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFAFBE7189BE3940090D199 /* libGBStickyViews.a */; };
 		8AFAFC05189BE3940090D199 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8AFAFC03189BE3940090D199 /* InfoPlist.strings */; };
 		8AFAFC07189BE3940090D199 /* GBStickyViewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AFAFC06189BE3940090D199 /* GBStickyViewsTests.m */; };
+		8AFAFC12189BE4870090D199 /* UIView+GBStickyViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AFAFC11189BE4870090D199 /* UIView+GBStickyViews.m */; };
+		8AFAFC13189BEB9E0090D199 /* UIView+GBStickyViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AFAFC11189BE4870090D199 /* UIView+GBStickyViews.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,13 +47,14 @@
 		8AFAFBEA189BE3940090D199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8AFAFBEE189BE3940090D199 /* GBStickyViews-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GBStickyViews-Prefix.pch"; sourceTree = "<group>"; };
 		8AFAFBEF189BE3940090D199 /* GBStickyViews.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GBStickyViews.h; sourceTree = "<group>"; };
-		8AFAFBF1189BE3940090D199 /* GBStickyViews.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GBStickyViews.m; sourceTree = "<group>"; };
 		8AFAFBF7189BE3940090D199 /* GBStickyViewsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GBStickyViewsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFAFBF8189BE3940090D199 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		8AFAFBFB189BE3940090D199 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		8AFAFC02189BE3940090D199 /* GBStickyViewsTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GBStickyViewsTests-Info.plist"; sourceTree = "<group>"; };
 		8AFAFC04189BE3940090D199 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8AFAFC06189BE3940090D199 /* GBStickyViewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GBStickyViewsTests.m; sourceTree = "<group>"; };
+		8AFAFC10189BE4870090D199 /* UIView+GBStickyViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+GBStickyViews.h"; sourceTree = "<group>"; };
+		8AFAFC11189BE4870090D199 /* UIView+GBStickyViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+GBStickyViews.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				8AFAFBEF189BE3940090D199 /* GBStickyViews.h */,
-				8AFAFBF1189BE3940090D199 /* GBStickyViews.m */,
+				8AFAFC10189BE4870090D199 /* UIView+GBStickyViews.h */,
+				8AFAFC11189BE4870090D199 /* UIView+GBStickyViews.m */,
 				8AFAFBED189BE3940090D199 /* Supporting Files */,
 			);
 			path = GBStickyViews;
@@ -224,7 +227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AFAFBF2189BE3940090D199 /* GBStickyViews.m in Sources */,
+				8AFAFC12189BE4870090D199 /* UIView+GBStickyViews.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AFAFC07189BE3940090D199 /* GBStickyViewsTests.m in Sources */,
+				8AFAFC13189BEB9E0090D199 /* UIView+GBStickyViews.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
