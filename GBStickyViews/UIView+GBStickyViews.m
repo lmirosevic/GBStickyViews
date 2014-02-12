@@ -44,7 +44,7 @@ _associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedVi
     [self setGBMasterAnchorNumber:[NSNumber numberWithInt:masterAnchor]];
 }
 
--(GBStickyViewsAnchor)GMSlaveAnchor {
+-(GBStickyViewsAnchor)GBSlaveAnchor {
     return (GBStickyViewsAnchor)[[self GBSlaveAnchorNumber] intValue];
 }
 -(void)setGBSlaveAnchor:(GBStickyViewsAnchor)slaveAnchor {
@@ -88,11 +88,16 @@ _associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedVi
     //clear out the old list of attached views if there were any
     [self _removeFrameChangedListenersFromViews:self.GBObservedViews];
     
-    //attach to this list of views
-    [self _attachFrameChangedListenersToViews:volatileViews];
+    if (shouldTrack) {
+        //attach to this list of views
+        [self _attachFrameChangedListenersToViews:volatileViews];
+        
+        //remember this list of views for later
+        self.GBObservedViews = volatileViews;
+    }
     
-    //remember this list of views for later
-    self.GBObservedViews = volatileViews;
+    //trigger the first realignment
+    [self _realignViewToMasterView:masterView];
 }
 
 #pragma mark - KVO
@@ -109,7 +114,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 
 -(void)_attachFrameChangedListenersToViews:(NSArray *)views {
     for (UIView *view in views) {
-        [self.class _attachFrameChangedListenerToView:view];
+        [self _attachFrameChangedListenerToView:view];
     }
 }
 
@@ -128,7 +133,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 
 -(void)_removeFrameChangedListenersFromViews:(NSArray *)views {
     for (UIView *view in views) {
-        [self.class _removeFrameChangedListenerFromView:view];
+        [self _removeFrameChangedListenerFromView:view];
     }
 }
 
@@ -147,7 +152,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 
 -(void)_realignViewToMasterView:(UIView *)masterView {
     //convert masterView coordinates to screen coordinates
-    CGRect masterFrame = [self.GBMasterView convertRect:self.bounds toView:nil];
+    CGRect masterFrame = [self.GBMasterView convertRect:self.GBMasterView.bounds toView:nil];
     
     //get own size
     CGSize selfSize = self.bounds.size;
