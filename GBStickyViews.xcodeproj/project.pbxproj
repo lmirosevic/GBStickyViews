@@ -20,6 +20,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8AEB2BD718ABA006005BAF7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8AD911B1162D9E2200C9D287;
+			remoteInfo = "GBToolbox-iOS";
+		};
+		8AEB2BD918ABA006005BAF7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A0C4E34165FA60C00A990FB;
+			remoteInfo = "GBToolboxUnitTests-iOS";
+		};
+		8AEB2BDB18ABA006005BAF7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A0377FB16BFCD2F0096C448;
+			remoteInfo = "GBToolbox-OSX";
+		};
+		8AEB2BDE18ABA038005BAF7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AD911B0162D9E2200C9D287;
+			remoteInfo = "GBToolbox-iOS";
+		};
 		8AFAFBFD189BE3940090D199 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8AFAFBDF189BE3940090D199 /* Project object */;
@@ -43,6 +71,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBToolbox.xcodeproj; path = ../GBToolbox/GBToolbox.xcodeproj; sourceTree = "<group>"; };
 		8AFAFBE7189BE3940090D199 /* libGBStickyViews.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGBStickyViews.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFAFBEA189BE3940090D199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8AFAFBEE189BE3940090D199 /* GBStickyViews-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GBStickyViews-Prefix.pch"; sourceTree = "<group>"; };
@@ -80,9 +109,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8AEB2BD018AB9FFF005BAF7C /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		8AEB2BD218ABA006005BAF7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8AEB2BD818ABA006005BAF7C /* libGBToolbox.a */,
+				8AEB2BDA18ABA006005BAF7C /* GBToolboxUnitTests-iOS.octest */,
+				8AEB2BDC18ABA006005BAF7C /* GBToolbox.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		8AFAFBDE189BE3940090D199 = {
 			isa = PBXGroup;
 			children = (
+				8AEB2BD018AB9FFF005BAF7C /* Libraries */,
 				8AFAFBEC189BE3940090D199 /* GBStickyViews */,
 				8AFAFC00189BE3940090D199 /* GBStickyViewsTests */,
 				8AFAFBE9189BE3940090D199 /* Frameworks */,
@@ -160,6 +208,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8AEB2BDF18ABA038005BAF7C /* PBXTargetDependency */,
 			);
 			name = GBStickyViews;
 			productName = GBStickyViews;
@@ -203,6 +252,12 @@
 			mainGroup = 8AFAFBDE189BE3940090D199;
 			productRefGroup = 8AFAFBE8189BE3940090D199 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8AEB2BD218ABA006005BAF7C /* Products */;
+					ProjectRef = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8AFAFBE6189BE3940090D199 /* GBStickyViews */,
@@ -210,6 +265,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8AEB2BD818ABA006005BAF7C /* libGBToolbox.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGBToolbox.a;
+			remoteRef = 8AEB2BD718ABA006005BAF7C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8AEB2BDA18ABA006005BAF7C /* GBToolboxUnitTests-iOS.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "GBToolboxUnitTests-iOS.octest";
+			remoteRef = 8AEB2BD918ABA006005BAF7C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8AEB2BDC18ABA006005BAF7C /* GBToolbox.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GBToolbox.framework;
+			remoteRef = 8AEB2BDB18ABA006005BAF7C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8AFAFBF5189BE3940090D199 /* Resources */ = {
@@ -243,6 +322,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		8AEB2BDF18ABA038005BAF7C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "GBToolbox-iOS";
+			targetProxy = 8AEB2BDE18ABA038005BAF7C /* PBXContainerItemProxy */;
+		};
 		8AFAFBFE189BE3940090D199 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8AFAFBE6189BE3940090D199 /* GBStickyViews */;
@@ -294,6 +378,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"../**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -326,6 +415,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"../**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -413,6 +507,7 @@
 				8AFAFC0C189BE3940090D199 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8AFAFC0D189BE3940090D199 /* Build configuration list for PBXNativeTarget "GBStickyViewsTests" */ = {
 			isa = XCConfigurationList;
@@ -421,6 +516,7 @@
 				8AFAFC0F189BE3940090D199 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
