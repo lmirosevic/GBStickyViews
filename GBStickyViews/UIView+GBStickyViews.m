@@ -165,47 +165,47 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
     switch (self.GBMasterAnchor) {
         case GBStickyViewsAnchorTopLeft: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 0,
-                                           masterFrame.origin.y + masterFrame.size.height * 0);
+                                                       masterFrame.origin.y + masterFrame.size.height * 0);
         } break;
             
         case GBStickyViewsAnchorTopCenter: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 0.5,
-                                           masterFrame.origin.y + masterFrame.size.height * 0);
+                                                       masterFrame.origin.y + masterFrame.size.height * 0);
         } break;
             
         case GBStickyViewsAnchorTopRight: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 1.,
-                                           masterFrame.origin.y + masterFrame.size.height * 0);
+                                                       masterFrame.origin.y + masterFrame.size.height * 0);
         } break;
             
         case GBStickyViewsAnchorCenterLeft: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 0,
-                                           masterFrame.origin.y + masterFrame.size.height * 0.5);
+                                                       masterFrame.origin.y + masterFrame.size.height * 0.5);
         } break;
             
         case GBStickyViewsAnchorCenterCenter: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 0.5,
-                                           masterFrame.origin.y + masterFrame.size.height * 0.5);
+                                                       masterFrame.origin.y + masterFrame.size.height * 0.5);
         } break;
             
         case GBStickyViewsAnchorCenterRight: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 1.,
-                                           masterFrame.origin.y + masterFrame.size.height * 0.5);
+                                                       masterFrame.origin.y + masterFrame.size.height * 0.5);
         } break;
             
         case GBStickyViewsAnchorBottomLeft: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 0,
-                                           masterFrame.origin.y + masterFrame.size.height * 1.);
+                                                       masterFrame.origin.y + masterFrame.size.height * 1.);
         } break;
             
         case GBStickyViewsAnchorBottomCenter: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 0.5,
-                                           masterFrame.origin.y + masterFrame.size.height * 1.);
+                                                       masterFrame.origin.y + masterFrame.size.height * 1.);
         } break;
             
         case GBStickyViewsAnchorBottomRight: {
             selfCoordinatesInGlobalSpace = CGPointMake(masterFrame.origin.x + masterFrame.size.width * 1.,
-                                           masterFrame.origin.y + masterFrame.size.height * 1.);
+                                                       masterFrame.origin.y + masterFrame.size.height * 1.);
         } break;
     }
     
@@ -213,47 +213,47 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
     switch (self.GBSlaveAnchor) {
         case GBStickyViewsAnchorTopLeft: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 0,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 0);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 0);
         } break;
             
         case GBStickyViewsAnchorTopCenter: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 0.5,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 0);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 0);
         } break;
             
         case GBStickyViewsAnchorTopRight: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 1.,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 0);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 0);
         } break;
             
         case GBStickyViewsAnchorCenterLeft: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 0,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 0.5);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 0.5);
         } break;
             
         case GBStickyViewsAnchorCenterCenter: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 0.5,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 0.5);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 0.5);
         } break;
             
         case GBStickyViewsAnchorCenterRight: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 1.,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 0.5);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 0.5);
         } break;
             
         case GBStickyViewsAnchorBottomLeft: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 0,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 1.);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 1.);
         } break;
             
         case GBStickyViewsAnchorBottomCenter: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 0.5,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 1.);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 1.);
         } break;
             
         case GBStickyViewsAnchorBottomRight: {
             selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x - selfSize.width * 1.,
-                                           selfCoordinatesInGlobalSpace.y - selfSize.height * 1.);
+                                                       selfCoordinatesInGlobalSpace.y - selfSize.height * 1.);
         } break;
     }
     
