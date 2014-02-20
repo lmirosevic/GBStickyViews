@@ -9,15 +9,15 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    GBStickyViewsAnchorTopLeft,
-    GBStickyViewsAnchorTopCenter,
-    GBStickyViewsAnchorTopRight,
-    GBStickyViewsAnchorCenterLeft,
+    GBStickyViewsAnchorLeftTop,
+    GBStickyViewsAnchorCenterTop,
+    GBStickyViewsAnchorRightTop,
+    GBStickyViewsAnchorLeftCenter,
     GBStickyViewsAnchorCenterCenter,
-    GBStickyViewsAnchorCenterRight,
-    GBStickyViewsAnchorBottomLeft,
-    GBStickyViewsAnchorBottomCenter,
-    GBStickyViewsAnchorBottomRight
+    GBStickyViewsAnchorRightCenter,
+    GBStickyViewsAnchorLeftBottom,
+    GBStickyViewsAnchorCenterBottom,
+    GBStickyViewsAnchorRightBottom
 } GBStickyViewsAnchor;
 
 @interface UIView (GBStickyViews)
@@ -25,4 +25,3 @@ typedef enum {
 -(void)attachToView:(UIView *)masterView masterAnchor:(GBStickyViewsAnchor)masterAnchor slaveAnchor:(GBStickyViewsAnchor)slaveAnchor offset:(CGPoint)offset track:(BOOL)shouldTrack;
 
 @end
-
