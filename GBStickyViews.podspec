@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "GBStickyViews"
-  s.version      = "1.0.0"
+  s.version      = "1.1.0"
   s.summary      = "Allows you to anchor a view onto another view, even if they're across view hierarchies and coordinate spaces."
   s.homepage     = "https://github.com/lmirosevic/GBStickyViews"
   s.license      = 'Apache License, Version 2.0'
@@ -12,4 +12,5 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency 'GBToolbox'
+  s.dependency 'JRSwizzle'
 end
