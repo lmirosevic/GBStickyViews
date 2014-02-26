@@ -20,6 +20,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8A7598C618BE4AF5001C0242 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A7598BF18BE4AF5001C0242 /* JRSwizzle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A6D5040178C585200585379;
+			remoteInfo = "JRSwizzle-iOS";
+		};
+		8A7598C818BE4AF5001C0242 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A7598BF18BE4AF5001C0242 /* JRSwizzle.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A6D5059178C595F00585379;
+			remoteInfo = "JRSwizzle-OSX";
+		};
+		8A7598CA18BE4B1B001C0242 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A7598BF18BE4AF5001C0242 /* JRSwizzle.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A6D503F178C585200585379;
+			remoteInfo = "JRSwizzle-iOS";
+		};
 		8AEB2BD718ABA006005BAF7C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
@@ -71,6 +92,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8A7598BF18BE4AF5001C0242 /* JRSwizzle.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JRSwizzle.xcodeproj; path = "../../Open Source/JRSwizzle-wrapper/JRSwizzle.xcodeproj"; sourceTree = "<group>"; };
 		8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBToolbox.xcodeproj; path = ../GBToolbox/GBToolbox.xcodeproj; sourceTree = "<group>"; };
 		8AFAFBE7189BE3940090D199 /* libGBStickyViews.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGBStickyViews.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFAFBEA189BE3940090D199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -109,9 +131,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A7598C018BE4AF5001C0242 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A7598C718BE4AF5001C0242 /* libJRSwizzle.a */,
+				8A7598C918BE4AF5001C0242 /* JRSwizzle.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		8AEB2BD018AB9FFF005BAF7C /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8A7598BF18BE4AF5001C0242 /* JRSwizzle.xcodeproj */,
 				8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */,
 			);
 			name = Libraries;
@@ -208,6 +240,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8A7598CB18BE4B1B001C0242 /* PBXTargetDependency */,
 				8AEB2BDF18ABA038005BAF7C /* PBXTargetDependency */,
 			);
 			name = GBStickyViews;
@@ -257,6 +290,10 @@
 					ProductGroup = 8AEB2BD218ABA006005BAF7C /* Products */;
 					ProjectRef = 8AEB2BD118ABA006005BAF7C /* GBToolbox.xcodeproj */;
 				},
+				{
+					ProductGroup = 8A7598C018BE4AF5001C0242 /* Products */;
+					ProjectRef = 8A7598BF18BE4AF5001C0242 /* JRSwizzle.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -267,6 +304,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		8A7598C718BE4AF5001C0242 /* libJRSwizzle.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libJRSwizzle.a;
+			remoteRef = 8A7598C618BE4AF5001C0242 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8A7598C918BE4AF5001C0242 /* JRSwizzle.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JRSwizzle.framework;
+			remoteRef = 8A7598C818BE4AF5001C0242 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		8AEB2BD818ABA006005BAF7C /* libGBToolbox.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -322,6 +373,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		8A7598CB18BE4B1B001C0242 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "JRSwizzle-iOS";
+			targetProxy = 8A7598CA18BE4B1B001C0242 /* PBXContainerItemProxy */;
+		};
 		8AEB2BDF18ABA038005BAF7C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "GBToolbox-iOS";
@@ -382,8 +438,9 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"../**",
+					"\"../../Open Source/JRSwizzle-wrapper\"/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -419,8 +476,9 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"../**",
+					"\"../../Open Source/JRSwizzle-wrapper\"/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

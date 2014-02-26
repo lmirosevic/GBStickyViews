@@ -9,6 +9,7 @@
 #import "UIView+GBStickyViews.h"
 
 #import <GBToolbox/GBToolbox.h>
+#import <JRSwizzle/JRSwizzle.h>
 
 @interface UIView ()
 
@@ -17,6 +18,8 @@
 @property (assign, nonatomic) GBStickyViewsAnchor       GBMasterAnchor;
 @property (assign, nonatomic) GBStickyViewsAnchor       GBSlaveAnchor;
 @property (strong, nonatomic) NSArray                   *GBObservedViews;
+@property (assign, nonatomic) BOOL                      GBStickyViewIsAttached;
+@property (strong, nonatomic, readonly) UIView          *GBStickyViewsSuperview;
 
 @end
 
@@ -29,6 +32,7 @@ _associatedObject(strong, nonatomic, NSValue *, GBOffsetValue, setGBOffsetValue)
 _associatedObject(strong, nonatomic, NSNumber *, GBMasterAnchorNumber, setGBMasterAnchorNumber)
 _associatedObject(strong, nonatomic, NSNumber *, GBSlaveAnchorNumber, setGBSlaveAnchorNumber)
 _associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedViews)
+_associatedObject(strong, nonatomic, NSNumber *, GBStickyViewIsAttachedNumber, setGBStickyViewIsAttachedNumber)
 
 -(CGPoint)GBOffset {
     return [[self GBOffsetValue] CGPointValue];
@@ -49,6 +53,18 @@ _associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedVi
 }
 -(void)setGBSlaveAnchor:(GBStickyViewsAnchor)slaveAnchor {
     [self setGBSlaveAnchorNumber:[NSNumber numberWithInt:slaveAnchor]];
+    
+}
+
+-(BOOL)GBStickyViewIsAttached {
+    return [[self GBStickyViewIsAttachedNumber] boolValue];
+}
+-(void)setGBStickyViewIsAttached:(BOOL)GBStickyViewIsAttached {
+    [self setGBStickyViewIsAttachedNumber:@(GBStickyViewIsAttached)];
+}
+
+-(UIView *)GBStickyViewsSuperview {
+    return self.superview;
 }
 
 #pragma mark - API
@@ -78,8 +94,9 @@ _associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedVi
     
     //combine this list of views
     NSArray *volatileViews = [volatileMasterChain arrayByAddingObjectsFromArray:volatileSelfChain];
- 
+    
     //store all our properties
+    self.GBStickyViewIsAttached = YES;
     self.GBMasterView = masterView;
     self.GBOffset = offset;
     self.GBMasterAnchor = masterAnchor;
@@ -97,14 +114,42 @@ _associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedVi
     }
     
     //trigger the first realignment
-    [self _realignViewToMasterView:masterView];
+    [self _realignViewToMasterView];
 }
 
-#pragma mark - KVO
+#pragma mark - KVO emitting for superview changes
+
++(BOOL)automaticallyNotifiesObserversForKey:(NSString *)key {
+    if ([key isEqualToString:@"GBStickyViewsSuperview"]) {
+        return NO;
+    }
+    else {
+        return [super automaticallyNotifiesObserversForKey:key];
+    }
+}
+
++(void)load {
+    [self jr_swizzleMethod:@selector(willMoveToSuperview:) withMethod:@selector(_swizz_willMoveToSuperview:) error:nil];
+    [self jr_swizzleMethod:@selector(didMoveToSuperview) withMethod:@selector(_swizz_didMoveToSuperview) error:nil];
+}
+
+-(void)_swizz_willMoveToSuperview:(UIView *)superview {
+    [self _swizz_willMoveToSuperview:superview];
+    
+    [self willChangeValueForKey:@"GBStickyViewsSuperview"];
+}
+
+-(void)_swizz_didMoveToSuperview {
+    [self _swizz_didMoveToSuperview];
+    
+    [self didChangeValueForKey:@"GBStickyViewsSuperview"];
+}
+
+#pragma mark - KVO observing
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (context == FrameChangedContext) {
-        [self _realignViewToMasterView:self.GBMasterView];
+        [self _realignViewToMasterView];
     }
 }
 
@@ -119,6 +164,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 }
 
 -(void)_attachFrameChangedListenerToView:(UIView *)view {
+    [view addObserver:self forKeyPath:@"GBStickyViewsSuperview" options:0 context:FrameChangedContext];
     [view addObserver:self forKeyPath:@"frame" options:0 context:FrameChangedContext];
     [view.layer addObserver:self forKeyPath:@"bounds" options:0 context:FrameChangedContext];
     [view.layer addObserver:self forKeyPath:@"transform" options:0 context:FrameChangedContext];
@@ -138,6 +184,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 }
 
 -(void)_removeFrameChangedListenerFromView:(UIView *)view {
+    [view removeObserver:self forKeyPath:@"GBStickyViewsSuperview" context:FrameChangedContext];
     [view removeObserver:self forKeyPath:@"frame" context:FrameChangedContext];
     [view.layer removeObserver:self forKeyPath:@"bounds" context:FrameChangedContext];
     [view.layer removeObserver:self forKeyPath:@"transform" context:FrameChangedContext];
@@ -150,7 +197,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
     [view.layer removeObserver:self forKeyPath:@"transform" context:FrameChangedContext];
 }
 
--(void)_realignViewToMasterView:(UIView *)masterView {
+-(void)_realignViewToMasterView {
     //convert masterView coordinates to screen coordinates
     CGRect masterFrame = [self.GBMasterView convertRect:self.GBMasterView.bounds toView:nil];
     
@@ -259,7 +306,7 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
     
     //apply offset as a delta
     selfCoordinatesInGlobalSpace = CGPointMake(selfCoordinatesInGlobalSpace.x + offset.x,
-                                   selfCoordinatesInGlobalSpace.y + offset.y);
+                                               selfCoordinatesInGlobalSpace.y + offset.y);
     
     //convert own coordinates from global space to parent view space
     CGPoint selfCoordinatesInParentSpace = [self.superview convertPoint:selfCoordinatesInGlobalSpace fromView:nil];
@@ -379,4 +426,4 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 
 @end
 
-//lm might be a good idea to detach the listeners when the view hierarchy of the observed views changes
+//lm might be a good idea to attempt to rexecute the attachment if the view hierachy changes
