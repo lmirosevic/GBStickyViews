@@ -9,6 +9,7 @@
 #import "UIView+GBStickyViews.h"
 
 #import <GBToolbox/GBToolbox.h>
+
 #import <JRSwizzle/JRSwizzle.h>
 
 @interface UIView ()
@@ -17,8 +18,9 @@
 @property (assign, nonatomic) CGPoint                   GBOffset;
 @property (assign, nonatomic) GBStickyViewsAnchor       GBMasterAnchor;
 @property (assign, nonatomic) GBStickyViewsAnchor       GBSlaveAnchor;
-@property (strong, nonatomic) NSArray                   *GBObservedViews;
-@property (assign, nonatomic) BOOL                      GBStickyViewIsAttached;
+@property (strong, nonatomic) NSArray                   *GBStickyViewFrameObservedViews;
+//@property (strong, nonatomic) NSArray                   *GBStickyViewHierarchyObservedViews;
+@property (assign, nonatomic) BOOL                      GBStickyViewIsTrackingMasterView;
 @property (strong, nonatomic, readonly) UIView          *GBStickyViewsSuperview;
 
 @end
@@ -31,8 +33,9 @@ _associatedObject(strong, nonatomic, UIView *, GBMasterView, setGBMasterView)
 _associatedObject(strong, nonatomic, NSValue *, GBOffsetValue, setGBOffsetValue)
 _associatedObject(strong, nonatomic, NSNumber *, GBMasterAnchorNumber, setGBMasterAnchorNumber)
 _associatedObject(strong, nonatomic, NSNumber *, GBSlaveAnchorNumber, setGBSlaveAnchorNumber)
-_associatedObject(strong, nonatomic, NSArray *, GBObservedViews, setGBObservedViews)
-_associatedObject(strong, nonatomic, NSNumber *, GBStickyViewIsAttachedNumber, setGBStickyViewIsAttachedNumber)
+_associatedObject(strong, nonatomic, NSArray *, GBStickyViewFrameObservedViews, setGBStickyViewFrameObservedViews)
+//_associatedObject(strong, nonatomic, NSArray *, GBStickyViewHierarchyObservedViews, setGBStickyViewHierarchyObservedViews)
+_associatedObject(strong, nonatomic, NSNumber *, GBStickyViewIsTrackingMasterViewNumber, setGBStickyViewIsTrackingMasterViewNumber)
 
 -(CGPoint)GBOffset {
     return [[self GBOffsetValue] CGPointValue];
@@ -56,11 +59,11 @@ _associatedObject(strong, nonatomic, NSNumber *, GBStickyViewIsAttachedNumber, s
     
 }
 
--(BOOL)GBStickyViewIsAttached {
-    return [[self GBStickyViewIsAttachedNumber] boolValue];
+-(BOOL)GBStickyViewIsTrackingMasterView {
+    return [[self GBStickyViewIsTrackingMasterViewNumber] boolValue];
 }
--(void)setGBStickyViewIsAttached:(BOOL)GBStickyViewIsAttached {
-    [self setGBStickyViewIsAttachedNumber:@(GBStickyViewIsAttached)];
+-(void)setGBStickyViewIsTrackingMasterView:(BOOL)GBStickyViewIsTrackingMasterView {
+    [self setGBStickyViewIsTrackingMasterViewNumber:@(GBStickyViewIsTrackingMasterView)];
 }
 
 -(UIView *)GBStickyViewsSuperview {
@@ -69,52 +72,98 @@ _associatedObject(strong, nonatomic, NSNumber *, GBStickyViewIsAttachedNumber, s
 
 #pragma mark - API
 
+-(void)_startTracking {
+    //stop tracking in case we were doing it before
+    [self _stopTracking];
+    
+    //ensure we're attached to some view
+    if (!self.superview) {
+        NSLog(@"GBStickyViews Warning: Tracking cancelled because view lost superview");
+    }
+    //ensure masterView is not nil
+    else if (!self.GBMasterView) {
+        NSLog(@"GBStickyViews Warning: Tracking cancelled because masterView is gone");
+    }
+    //ensure master is attached to some view
+    else if (!self.GBMasterView.superview) {
+        NSLog(@"GBStickyViews Warning: Tracking cancelled because masterView lost superview");
+    }
+    //ensure that we are not a parent of the masterView
+    else if ([self _isParentOfView:self.GBMasterView]) {
+        NSLog(@"GBStickyViews Warning: Tracking cancelled because masterView is now a child view of view");
+    }
+    else {
+        //find the view which is the base common coordinate system
+        UIView *lowestCommonAncestor = [self.class _lowestCommonAncestorBetweenView:self andView:self.GBMasterView];
+        
+        //get the list of views whose change in position would affect its relative position to self in the ancestry chain between [master, LCA[
+        NSArray *volatileMasterChain = [self.GBMasterView _ancestryChainUpToAndExcluding:lowestCommonAncestor];
+        
+        //get the list of views whose change in position would affect its relative position to masterView in the ancestry chain between ]self, LCA[
+        NSMutableArray *volatileSelfChain = [[self _ancestryChainUpToAndExcluding:lowestCommonAncestor] mutableCopy];
+        [volatileSelfChain removeObjectAtIndex:0];//remove self to get desired set
+        
+        //combine this list of views for the frame changed list of views
+        self.GBStickyViewFrameObservedViews = [volatileMasterChain arrayByAddingObjectsFromArray:volatileSelfChain];
+        
+        //attach listeners to this list of views
+        [self _attachFrameChangedListenersToViews:self.GBStickyViewFrameObservedViews];
+        
+        //        //append self back to the list to get the hierarchy dependent views
+        //        self.GBStickyViewHierarchyObservedViews = [self.GBStickyViewFrameObservedViews arrayByAddingObject:self];
+        //
+        //        //attach listeners to this list of views
+        //        [self _attachHierarchyChangedListenersToViews:self.GBStickyViewHierarchyObservedViews];
+        
+        //update our state
+        self.GBStickyViewIsTrackingMasterView = YES;
+    }
+}
+
+-(void)_stopTracking {
+    self.GBStickyViewIsTrackingMasterView = NO;
+    
+    //clear out the old list of attached frame change views (if there were any)
+    [self _removeFrameChangedListenersFromViews:self.GBStickyViewFrameObservedViews];
+    self.GBStickyViewFrameObservedViews = nil;
+    
+    //    //clear out the old list of attached hierarchy change views (if there were any)
+    //    [self _removeHierarchyChangedListenersFromViews:self.GBStickyViewHierarchyObservedViews];
+    //    self.GBStickyViewHierarchyObservedViews = nil;
+}
+
 -(void)attachToView:(UIView *)masterView masterAnchor:(GBStickyViewsAnchor)masterAnchor slaveAnchor:(GBStickyViewsAnchor)slaveAnchor offset:(CGPoint)offset track:(BOOL)shouldTrack {
     //ensure we're attached to some view
     if (!self.superview) @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Must first add this view to a superview, and then call attachToView:masterAnchor:slaveAnchor:offset:track:" userInfo:nil];
-    
     //ensure masterView is not nil
     if (!masterView) @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"masterView must not be nil" userInfo:nil];
-    
     //ensure master is attached to some view
     if (!masterView.superview) @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Must first add the masterView to a superview, and then call attachToView:masterAnchor:slaveAnchor:offset:track:" userInfo:nil];
-    
     //ensure that we are not a parent of the masterView
     if ([self _isParentOfView:masterView]) @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Tried to attach a view to a master view when the master view was a child view." userInfo:nil];
     
-    //find the view which is the base common coordinate system
-    UIView *lowestCommonAncestor = [self.class _lowestCommonAncestorBetweenView:self andView:masterView];
-    
-    //get the list of views whose change in position would affect it's relative position to self in the ancestry chain between [master, LCA[
-    NSArray *volatileMasterChain = [masterView _ancestryChainUpToAndExcluding:lowestCommonAncestor];
-    
-    //get the list of views whose change in position would affect it's relative position to masterView in the ancestry chain between ]self, LCA[
-    NSMutableArray *volatileSelfChain = [[self _ancestryChainUpToAndExcluding:lowestCommonAncestor] mutableCopy];
-    [volatileSelfChain removeObjectAtIndex:0];//remove self
-    
-    //combine this list of views
-    NSArray *volatileViews = [volatileMasterChain arrayByAddingObjectsFromArray:volatileSelfChain];
-    
-    //store all our properties
-    self.GBStickyViewIsAttached = YES;
-    self.GBMasterView = masterView;
-    self.GBOffset = offset;
-    self.GBMasterAnchor = masterAnchor;
-    self.GBSlaveAnchor = slaveAnchor;
-    
-    //clear out the old list of attached views if there were any
-    [self _removeFrameChangedListenersFromViews:self.GBObservedViews];
-    
+    //if we're tracking, then we set up tracking for the view
     if (shouldTrack) {
-        //attach to this list of views
-        [self _attachFrameChangedListenersToViews:volatileViews];
+        //store all our properties
+        self.GBMasterView = masterView;
+        self.GBOffset = offset;
+        self.GBMasterAnchor = masterAnchor;
+        self.GBSlaveAnchor = slaveAnchor;
         
-        //remember this list of views for later
-        self.GBObservedViews = volatileViews;
+        //set up the actual tracking
+        [self _startTracking];
+        
+        //trigger the first realignment
+        [self _realignViewToMasterView];
     }
-    
-    //trigger the first realignment
-    [self _realignViewToMasterView];
+    //otherwise we just realign the view once
+    else {
+        //stop tracking, in case we were doing it previously
+        [self _stopTracking];
+        
+        //trigger the realignment
+        [self _realignViewToMasterView];
+    }
 }
 
 #pragma mark - KVO emitting for superview changes
@@ -147,21 +196,39 @@ _associatedObject(strong, nonatomic, NSNumber *, GBStickyViewIsAttachedNumber, s
 
 #pragma mark - KVO observing
 
+static void * const FrameChangedContext = (void *)&FrameChangedContext;
+static void * const HierarchyChangedContext = (void *)&HierarchyChangedContext;
+
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (context == FrameChangedContext) {
+    if (context == HierarchyChangedContext) {
+        //restart our tracking setup as the view hierarchy changed
+        [self _startTracking];
+        
+        //send off an initial update
+        [self _realignViewToMasterView];
+    }
+    else if (context == FrameChangedContext) {
         [self _realignViewToMasterView];
     }
 }
 
 #pragma mark - util
 
-static void * const FrameChangedContext = (void *)&FrameChangedContext;
+//-(void)_attachHierarchyChangedListenersToViews:(NSArray *)views {
+//    for (UIView *view in views) {
+//        [self _attachHierarchyChangedListenerToView:view];
+//    }
+//}
 
 -(void)_attachFrameChangedListenersToViews:(NSArray *)views {
     for (UIView *view in views) {
         [self _attachFrameChangedListenerToView:view];
     }
 }
+
+//-(void)_attachHierarchyChangedListenerToView:(UIView *)view {
+//    [view addObserver:self forKeyPath:@"GBStickyViewsSuperview" options:0 context:HierarchyChangedContext];
+//}
 
 -(void)_attachFrameChangedListenerToView:(UIView *)view {
     [view addObserver:self forKeyPath:@"GBStickyViewsSuperview" options:0 context:FrameChangedContext];
@@ -177,11 +244,21 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
     [view.layer addObserver:self forKeyPath:@"transform" options:0 context:FrameChangedContext];
 }
 
+//-(void)_removeHierarchyChangedListenersFromViews:(NSArray *)views {
+//    for (UIView *view in views) {
+//        [self _removeHierarchyChangedListenerFromView:view];
+//    }
+//}
+
 -(void)_removeFrameChangedListenersFromViews:(NSArray *)views {
     for (UIView *view in views) {
         [self _removeFrameChangedListenerFromView:view];
     }
 }
+
+//-(void)_removeHierarchyChangedListenerFromView:(UIView *)view {
+//    [view removeObserver:self forKeyPath:@"GBStickyViewsSuperview" context:HierarchyChangedContext];
+//}
 
 -(void)_removeFrameChangedListenerFromView:(UIView *)view {
     [view removeObserver:self forKeyPath:@"GBStickyViewsSuperview" context:FrameChangedContext];
@@ -426,4 +503,4 @@ static void * const FrameChangedContext = (void *)&FrameChangedContext;
 
 @end
 
-//lm might be a good idea to attempt to rexecute the attachment if the view hierachy changes
+//lm might be a good idea to attempt to rexecute the attachment if the view hierachy changes, which is implemented and commented out, but doesn't seem to work properly
