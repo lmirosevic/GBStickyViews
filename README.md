@@ -1,5 +1,4 @@
-GBStickyViews
-============
+# GBStickyViews ![Version](https://img.shields.io/cocoapods/v/GBStickyViews.svg?style=flat)&nbsp;![License](https://img.shields.io/badge/license-Apache_2-green.svg?style=flat)
 
 Allows you to anchor a view onto another view, even if they're across view hierarchies and coordinate spaces.
 
