@@ -22,6 +22,9 @@ typedef enum {
 
 @interface UIView (GBStickyViews)
 
--(void)attachToView:(UIView *)masterView masterAnchor:(GBStickyViewsAnchor)masterAnchor slaveAnchor:(GBStickyViewsAnchor)slaveAnchor offset:(CGPoint)offset track:(BOOL)shouldTrack;
+/**
+ Attaches the slave view to the master view so that it follows it around at all times according to the anchor config and offset
+ */
+- (void)attachToView:(UIView *)masterView masterAnchor:(GBStickyViewsAnchor)masterAnchor slaveAnchor:(GBStickyViewsAnchor)slaveAnchor offset:(CGPoint)offset;
 
 @end
